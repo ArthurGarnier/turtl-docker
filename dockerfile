@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 
-RUN apt-get update && apt-get install -y wget libterm-readline-perl-perl gcc
+RUN apt-get update && apt-get install -y wget libterm-readline-perl-perl gcc libuv1-dev git
 
 #Install ccl
 
@@ -16,11 +16,8 @@ RUN cat /quicklisp_install | /opt/ccl/lx86cl64 --load /quicklisp.lisp
 
 RUN echo "deb http://download.rethinkdb.com/apt xenial main" | tee /etc/apt/sources.list.d/rethinkdb.list && wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | apt-key add - && apt-get update && apt-get install rethinkdb -y
 
-RUN apt-get install libuv1-dev -y
-
-RUN apt-get install git -y
-
 RUN cd /opt/ && git clone https://github.com/turtl/api.git
+RUN cd /root/quicklisp/local-projects && git clone git://github.com/orthecreedence/cl-hash-util
 COPY config.lisp /opt/api/config/
 COPY launch.lisp /opt/api/
 COPY rethinkdb.conf /etc/rethinkdb/instances.d/instance1.conf
