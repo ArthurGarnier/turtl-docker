@@ -1,0 +1,1 @@
+/etc/init.d/rethinkdb restart && cd /opt/api && /opt/ccl/lx86cl64 -l /root/quicklisp/setup.lisp -l launch.lisp
