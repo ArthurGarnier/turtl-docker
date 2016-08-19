@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# default values
+PIDFILE=${PIDFILE:-nil}
+BINDADDR=${BINDADDR:-0.0.0.0}
+BINDPORT=${BINDPORT:-8181}
+PROD_ERR_HANDLING=${PROD_ERR_HANDLING:-t}
+FQDN=${FQDN:-turtl.local}
+SITE_URL=${SITE_URL:-http://turtl.local}
+ADMIN_EMAIL=${ADMIN_EMAIL:-root@example.com}
+EMAIL_FROM=${EMAIL_FROM:-noreply@example.com}
+SMTP_USER=${SMTP_USER:-}
+SMTP_PASS=${SMTP_PASS:-}
+DISPLAY_ERRORS=${DISPLAY_ERRORS:-t}
+DEFAULT_STORAGE_LIMIT=${DEFAULT_STORAGE_LIMIT:-100}
+STORAGE_INVITE_CREDIT=${STORAGE_INVITE_CREDIT:-25}
+LOCAL_UPLOAD_URL=${LOCAL_UPLOAD_URL:-http://turtl.local}
+LOCAL_UPLOAD_PATH=${LOCAL_UPLOAD_PATH:-"/opt/api/uploads"}
+AWS_S3_TOKEN=${AWS_S3_TOKEN:-(:token ''
+               :secret ''
+               :bucket ''
+               :endpoint 'https://s3.amazonaws.com')}
+
+# generates the config-file
+cat  << __ENDCONFIG__ > /opt/api/config/config.lisp
+(in-package :turtl)
+(defparameter *root* (asdf:system-relative-pathname :turtl #P""))
+(defparameter *pid-file* "${PIDFILE}")
+(defvar *server-bind* "${BINDADDR}")
+(defvar *server-port* ${BINDPORT})
+(defvar *db-name* "turtl")
+(defvar *db-host* "127.0.0.1")
+(defvar *db-port* 28015)
+(defvar *production-error-handling* ${PROD_ERR_HANDLING})
+(defvar *enable-hsts-header* nil)
+(defvar *site-url* "${SITE_URL}")
+(defvar *api-path* "")
+(defvar *admin-email* "${ADMIN_EMAIL}")
+(defvar *email-from* "${EMAIL_FROM}")
+(defvar *email-user* "${SMTP_USER}")
+(defvar *email-pass* "${SMTP_PASS}")
+(defvar *display-errors* ${DISPLAY_ERRORS})
+(defparameter *default-storage-limit* ${DEFAULT_STORAGE_LIMIT})
+(defparameter *storage-invite-credit* ${STORAGE_INVITE_CREDIT})
+(vom:config :turtl :info)
+(defvar *local-upload* "${LOCAL_UPLOAD_PATH}")
+(defvar *local-upload-url* "${LOCAL_UPLOAD_URL}")
+(defvar *amazon-s3* "${AWS_S3_TOKEN}")
+__ENDCONFIG__
+
+cat /opt/api/config/config.footer >> /opt/api/config/config.lisp
+
+# start the turtl server
+/opt/turtl-start
