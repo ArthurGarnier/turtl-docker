@@ -4,7 +4,10 @@ Docker file to run turtl (turtl.it) api server
 
 ## How to build ?
 
+```
 sudo docker build -t turtl_docker .
+```
+
 
 ## How to run ?
 
