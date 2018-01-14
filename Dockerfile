@@ -10,7 +10,7 @@ RUN echo "deb http://download.rethinkdb.com/apt xenial main" | tee /etc/apt/sour
 	apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y wget libterm-readline-perl-perl gcc libuv1-dev git \
-						rethinkdb && \
+						rethinkdb dos2unix && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install ccl
@@ -34,10 +34,19 @@ RUN /opt/ccl/lx86cl64 -l /root/quicklisp/setup.lisp
 COPY config.footer /opt/api/config/
 COPY turtl-setup /opt/
 COPY turtl-start /opt/
-RUN chmod a+x /opt/turtl-setup
-RUN chmod a+x /opt/turtl-start
 COPY launch.lisp /opt/api/
 COPY rethinkdb.conf /etc/rethinkdb/instances.d/instance1.conf
+
+RUN chmod a+x \
+	/opt/turtl-setup \
+	/opt/turtl-start
+
+RUN dos2unix \
+	/opt/turtl-setup \
+	/opt/turtl-start \
+	/opt/api/config/config.footer \
+	/opt/api/launch.lisp \
+	/etc/rethinkdb/instances.d/instance1.conf
 
 # general settings
 EXPOSE 8181
