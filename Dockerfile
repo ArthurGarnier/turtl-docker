@@ -9,9 +9,11 @@ RUN echo "deb http://download.rethinkdb.com/apt xenial main" | tee /etc/apt/sour
 	apt-key add - < /tmp/rethinkdb-pubkey.gpg && \
 	apt-get update && \
 	apt-get upgrade -y && \
-	apt-get install -y wget libterm-readline-perl-perl gcc libuv1-dev git \
+	apt-get install -y wget libterm-readline-perl-perl gcc libuv1-dev git libssl-dev \
 						rethinkdb dos2unix && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /lib/x86_64-linux-gnu/libcrypto.so.1.0.0  /lib/x86_64-linux-gnu/libcrypto.so.1.1
 
 # Install ccl
 RUN wget -P /opt/ ftp://ftp.clozure.com/pub/release/${CCL_VERSION}/ccl-${CCL_VERSION}-linuxx86.tar.gz && \
