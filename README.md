@@ -1,3 +1,4 @@
+# THIS IMAGE IS DEPRECATED. IT DOESN'T USE THE NEW API (NodeJS)
 # turtl-docker
 
 Docker file to run turtl (turtl.it) api server
